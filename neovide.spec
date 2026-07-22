@@ -55,6 +55,7 @@ UI.
 
 %prep
 %setup
+tar xvfz %{SOURCE1}
 mkdir -p .cargo
 cat >> .cargo/config.toml << EOF
 [source.crates-io]
