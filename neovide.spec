@@ -15,6 +15,7 @@ Release:        0
 License:        MIT
 URL:            https://github.com/neovide/neovide
 Source0:        https://github.com/neovide/neovide/archive/refs/tags/%{version}.tar.gz
+Source1:        neovide-%{version}-vendor.tar.gz
 
 # Tools
 BuildRequires:  cargo
@@ -54,7 +55,14 @@ UI.
 
 %prep
 %setup
+mkdir -p .cargo
+cat >> .cargo/config.toml << EOF
+[source.crates-io]
+replace-with = "vendored-sources"
 
+[source.vendored-sources]
+directory = "vendor"
+EOF
 
 %build
 cargo build --release --verbose
