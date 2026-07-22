@@ -7,6 +7,7 @@
 # Directory where the desktop entry will be installed
 %global xdg_application_dir %{_datadir}/applications
 %global debug_package %{nil}
+%global skia_version m145-0.92.0
 
 Name:           neovide
 Summary:        No Nonsense Neovim Client in Rust
@@ -16,6 +17,7 @@ License:        MIT
 URL:            https://github.com/neovide/neovide
 Source0:        https://github.com/neovide/neovide/archive/refs/tags/%{version}.tar.gz
 Source1:        neovide-%{version}-vendor.tar.gz
+Source2:        skia-m145-0.92.0.tar.gz
 
 # Tools
 BuildRequires:  cargo
@@ -23,6 +25,10 @@ BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  ninja
+BuildRequires:  python
+BuildRequires:  clang
+BuildRequires:  llvm
 
 # Libraries
 #BuildRequires:  lib64SDL2-devel
@@ -56,6 +62,11 @@ UI.
 %prep
 %setup
 tar xvfz %{SOURCE1}
+tar xvfz %{SOURCE2}
+mv skia-%{skia_version} skia-source
+export SKIA_SOURCE_DIR=%{builddir}/skia-source
+export FORCE_SKIA_BUILD=1 
+export SKIA_FORCE_SYSTEM_LIBRARIES=1
 mkdir -p .cargo
 cat >> .cargo/config.toml << EOF
 [source.crates-io]
