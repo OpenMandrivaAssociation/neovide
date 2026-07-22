@@ -43,6 +43,10 @@ BuildRequires:  lib64vulkan-devel
 BuildRequires:  lib64stdc++-devel
 BuildRequires:  glibc-devel
 BuildRequires:  lib64icu-devel
+BuildRequires:  lib64jpeg-devel
+BuildRequires:  lib64png-devel
+BuildRequires:  lib64icu-devel
+BuildRequires:  lib64harfbuzz-devel
 
 # Base
 Requires:       neovim >= 0.4.0
