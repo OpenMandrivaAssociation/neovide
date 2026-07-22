@@ -10,7 +10,7 @@
 
 Name:           neovide
 Summary:        No Nonsense Neovim Client in Rust
-Version:        0.15.0
+Version:        0.16.2
 Release:        0
 License:        MIT
 URL:            https://github.com/neovide/neovide
