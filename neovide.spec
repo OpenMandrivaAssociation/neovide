@@ -17,7 +17,7 @@ License:        MIT
 URL:            https://github.com/neovide/neovide
 Source0:        https://github.com/neovide/neovide/archive/refs/tags/%{version}.tar.gz
 Source1:        neovide-%{version}-vendor.tar.gz
-Source2:        skia-m145-0.92.0.tar.gz
+Source2:        skia-m145-0.92.0-full.tar.gz
 
 # Tools
 BuildRequires:  cargo
@@ -29,6 +29,7 @@ BuildRequires:  ninja
 BuildRequires:  python
 BuildRequires:  clang
 BuildRequires:  llvm
+BuildRequires:  gn
 
 # Libraries
 #BuildRequires:  lib64SDL2-devel
@@ -39,6 +40,9 @@ BuildRequires:  lib64freetype6-devel
 BuildRequires:  lib64xext-devel
 BuildRequires:  lib64openssl-devel
 BuildRequires:  lib64vulkan-devel
+BuildRequires:  lib64stdc++-devel
+BuildRequires:  glibc-devel
+BuildRequires:  lib64icu-devel
 
 # Base
 Requires:       neovim >= 0.4.0
@@ -64,9 +68,6 @@ UI.
 tar xvfz %{SOURCE1}
 tar xvfz %{SOURCE2}
 mv skia-%{skia_version} skia-source
-export SKIA_SOURCE_DIR=%{builddir}/skia-source
-export FORCE_SKIA_BUILD=1 
-export SKIA_FORCE_SYSTEM_LIBRARIES=1
 mkdir -p .cargo
 cat >> .cargo/config.toml << EOF
 [source.crates-io]
@@ -77,6 +78,21 @@ directory = "vendor"
 EOF
 
 %build
+echo "=== Tool & Path Debug ==="
+pwd
+ls -l skia-source/.gn skia-source/DEPS || echo ".gn or DEPS missing"
+which gn
+gn --version
+
+export PATH="/usr/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/lib64:$LD_LIBRARY_PATH"
+export SKIA_SOURCE_DIR=%{builddir}/neovide-0.16.2/skia-source
+echo "SKIA_SOURCE_DIR=$SKIA_SOURCE_DIR"
+export FORCE_SKIA_BUILD=1 
+export SKIA_USE_SYSTEM_LIBRARIES=1
+export SKIA_NINJA_COMMAND=/usr/bin/ninja
+export SKIA_GN_COMMAND=/usr/bin/gn
+
 cargo build --release --verbose
 
 
